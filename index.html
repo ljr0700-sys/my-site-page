@@ -1,1266 +1,625 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>부동산 자산 디지털화 · 플랫폼</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>부동산 자산 디지털화 체험 (3단계)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#050816;
-      color:#f5f5f5;
-      line-height:1.6;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #050816;
+      color: #f5f5f5;
+      line-height: 1.5;
     }
-    a{color:#ffd36b;text-decoration:none;}
-    header{
-      padding:18px 20px 14px;
-      background:linear-gradient(135deg,#1f55ff,#26a5ff);
-      color:#fff;
+    .page {
+      max-width: 1080px;
+      margin: 20px auto 60px auto;
+      padding: 0 16px;
     }
-    .wrap{max-width:1080px;margin:0 auto;}
-    .top-title h1{margin:0;font-size:22px;}
-    .top-title p{margin:6px 0 0;font-size:13px;opacity:.9;}
-    .login-row{
-      margin-top:12px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:flex-end;
+    .banner {
+      background: linear-gradient(135deg, #1555ff, #26a5ff);
+      border-radius: 14px;
+      padding: 18px 20px 14px 20px;
+      margin-bottom: 16px;
     }
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:3px;
-      font-size:11px;
+    .banner h1 {
+      font-size: 22px;
+      margin-bottom: 4px;
     }
-    .field input{
-      padding:6px 8px;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,.5);
-      min-width:120px;
+    .banner p {
+      font-size: 13px;
+      opacity: 0.9;
     }
-    .btn{
-      border:none;
-      border-radius:999px;
-      padding:7px 14px;
-      font-size:12px;
-      cursor:pointer;
+    .steps-nav {
+      display: flex;
+      gap: 8px;
+      margin: 10px 0 18px 0;
+      flex-wrap: wrap;
     }
-    .btn-main{background:#ffc94a;color:#1a130a;}
-    .btn-sub{
-      background:transparent;
-      border:1px solid rgba(255,255,255,.7);
-      color:#fff;
+    .steps-nav button {
+      flex: 1 1 130px;
+      border: 1px solid #2c3f80;
+      background: #0c1020;
+      color: #f5f5f5;
+      padding: 10px 8px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
     }
-    .btn-small{
-      margin-top:6px;
-      border:none;
-      border-radius:999px;
-      padding:6px 12px;
-      font-size:11px;
-      cursor:pointer;
-      background:#22c55e;
-      color:#041008;
+    .steps-nav button.active {
+      background: #17b6ff;
+      border-color: #17b6ff;
+      color: #051018;
+      font-weight: 600;
     }
-    .status-text{font-size:12px;margin-top:6px;}
-    .status-text strong{color:#ffe480;}
-
-    nav{
-      background:#020615;
-      border-bottom:1px solid rgba(255,255,255,.06);
+    .card {
+      background: #0c1020;
+      border-radius: 14px;
+      padding: 18px 20px 22px 20px;
+      box-shadow: 0 0 0 1px #1a2545;
     }
-    nav .tabs{
-      max-width:1080px;
-      margin:0 auto;
-      padding:8px 16px;
-      display:flex;
-      gap:8px;
-      overflow-x:auto;
+    .step-title {
+      font-size: 18px;
+      margin-bottom: 10px;
     }
-    .tab{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:#111827;
-      cursor:pointer;
-      white-space:nowrap;
-      opacity:.8;
+    .step-sub {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: 14px;
     }
-    .tab.active{
-      background:#2563eb;
-      opacity:1;
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
     }
 
-    main{max-width:1080px;margin:0 auto;padding:16px 16px 48px;}
-    section{
-      margin-top:16px;
-      background:#020617;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.06);
-      padding:16px;
-    }
-    section h2{margin:0 0 8px;font-size:18px;}
-    section p{margin:0 0 10px;font-size:13px;color:#e5e7f5;}
-    .card{
-      padding:10px 12px;
-      background:#02081a;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.06);
-      font-size:13px;
-      margin-top:8px;
-    }
-    .card h3{margin:0 0 6px;font-size:14px;}
-    ul{margin:6px 0 0 18px;font-size:12px;color:#cbd0ec;}
-    li+li{margin-top:3px;}
-    .muted{font-size:11px;color:#9ca3c9;margin-top:8px;}
-    .badge{
-      display:inline-block;
-      font-size:11px;
-      padding:2px 7px;
-      border-radius:999px;
-      background:#111827;
-      margin-bottom:4px;
-    }
-    .action-btn{
-      margin-top:6px;
-      font-size:11px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:none;
-      cursor:pointer;
-      background:#22c55e;
-      color:#041008;
-    }
-    .action-btn.done{
-      background:#4b5563;
-      color:#cbd5f5;
-      cursor:default;
+    h2 { font-size: 18px; margin-bottom: 10px; }
+    h3 { font-size: 15px; margin: 12px 0 6px 0; }
+
+    ul, ol { margin-left: 18px; margin-bottom: 8px; }
+    li { margin-bottom: 3px; font-size: 13px; }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #2a3d70;
+      margin-right: 6px;
+      margin-bottom: 4px;
+      opacity: 0.9;
     }
 
-    .input-box{
-      margin-top:12px;
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid rgba(148,163,184,.5);
-      background:#02081a;
+    .info-box {
+      border-radius: 10px;
+      border: 1px dashed #394b80;
+      padding: 10px 12px;
+      font-size: 12px;
+      margin: 10px 0;
+      background: rgba(10, 18, 40, 0.9);
     }
-    .input-box label{
-      display:block;
-      font-size:12px;
-      margin-bottom:4px;
+
+    .form-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
     }
-    .input-box textarea,
-    .input-box input{
-      width:100%;
-      border-radius:8px;
-      border:1px solid rgba(148,163,184,.8);
-      padding:6px 8px;
-      font-size:12px;
-      resize:vertical;
-      background:#020617;
-      color:#e5e7f5;
+    .form-field {
+      flex: 1 1 220px;
+      min-width: 200px;
     }
-    .input-row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-      margin-bottom:6px;
+    .form-field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      opacity: 0.9;
     }
-    .ad-slot{
-      margin-top:10px;
-      padding:8px 10px;
-      border-radius:8px;
-      border:1px dashed rgba(250,204,21,.7);
-      font-size:11px;
-      background:#111827;
-      color:#facc15;
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 8px;
+      border: 1px solid #2b395c;
+      background: #050816;
+      color: #f5f5f5;
+      font-size: 13px;
     }
-    .chain-block{
-      font-size:11px;
-      border-radius:8px;
-      border:1px solid rgba(148,163,184,.6);
-      padding:8px 10px;
-      margin-top:6px;
-      background:#02081a;
+    textarea { resize: vertical; min-height: 60px; }
+
+    .btn-row {
+      margin-top: 6px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
-    .chain-block code{font-size:10px;}
+    button.primary,
+    button.secondary,
+    button.danger {
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    button.primary {
+      background: #17b6ff;
+      color: #051018;
+      font-weight: 600;
+    }
+    button.primary:hover { filter: brightness(1.05); }
+    button.secondary {
+      background: #151a2e;
+      color: #f5f5f5;
+      border: 1px solid #2c3f80;
+    }
+    button.secondary:hover { background: #1e2440; }
+    button.danger {
+      background: #ff3b4d;
+      color: #fff;
+    }
+    button.danger:hover { filter: brightness(1.08); }
+
+    .prop-summary {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed #2b395c;
+      font-size: 12px;
+    }
+
+    .chain-summary {
+      font-size: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-top: 6px;
+    }
+    th, td {
+      border: 1px solid #273357;
+      padding: 4px 5px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #161d35;
+      font-weight: 600;
+    }
+    tbody tr:nth-child(even) { background: #0e1322; }
+
+    .hash {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 10px;
+      opacity: 0.9;
+      word-break: break-all;
+    }
+    .pill {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: #1a8545;
+      margin-left: 4px;
+    }
+
+    .small {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 600px) {
+      .banner h1 { font-size: 18px; }
+      .card { padding: 14px 12px 18px 12px; }
+      table { font-size: 10px; }
+      th, td { padding: 3px 4px; }
+    }
   </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="top-title">
-      <h1>부동산 자산 디지털화 · 플랫폼</h1>
-      <p>
-        건축·거주·매매·임대·기술 공유 기록을 모으고,
-        정보 공유에 따라 토큰·코인·블록체인 개념을 시험해 보는 개인용 도구입니다.
-        (이 PC 브라우저에만 저장 · 실제 블록체인/투자와 직접 연결되지는 않음)
-      </p>
-    </div>
-
-    <div class="login-row">
-      <div class="field">
-        <label>아이디</label>
-        <input id="userId" placeholder="예) jung">
-      </div>
-      <div class="field">
-        <label>비밀번호</label>
-        <input id="userPw" type="password" placeholder="예) sam377">
-      </div>
-      <button class="btn btn-main" id="btnLogin">로그인</button>
-      <button class="btn btn-sub" id="btnLogout">로그아웃</button>
-    </div>
-
-    <div class="status-text" id="statusText">
-      아직 로그인 전입니다. <strong>가입은 위 메뉴의 “회원가입” 탭</strong>에서 먼저 진행해 주세요.
-      (이 브라우저에만 저장 · 아이디별로 토큰·코인·메모가 따로 누적됩니다.)
-    </div>
+<div class="page">
+  <div class="banner">
+    <h1>부동산 자산 디지털화 체험 (3단계)</h1>
+    <p>부동산 정보를 토큰·블록체인 개념으로 기록해 보는 연습용 사이트입니다.
+      <strong>실제 투자·거래 서비스가 아니며, 모든 데이터는 이 브라우저에만 저장됩니다.</strong>
+    </p>
   </div>
-</header>
 
-<nav>
-  <div class="tabs">
-    <div class="tab active" data-page="home">홈</div>
-    <div class="tab" data-page="signup">회원가입</div>
-    <div class="tab" data-page="live">거주</div>
-    <div class="tab" data-page="trade">매매·임대</div>
-    <div class="tab" data-page="build">가상 건축·기술 공유</div>
-    <div class="tab" data-page="chain">블록체인 개념</div>
-    <div class="tab" data-page="token">토큰·코인 계정</div>
-    <div class="tab" data-page="mypage">마이페이지</div>
+  <div class="steps-nav">
+    <button data-step="1" class="active">1단계 : 개념 설명</button>
+    <button data-step="2">2단계 : 부동산 정보 입력</button>
+    <button data-step="3">3단계 : 블록체인 체험</button>
   </div>
-</nav>
 
-<main>
-  <!-- 홈 -->
-  <section data-page-section="home">
-    <h2>1. 부동산 자산 디지털화 개요</h2>
-    <p>
-      이 도구는 집을 짓고 싶은 사람, 실제 거주자, 매매·임대 운영자, 기술 공유자, 광고주까지
-      한 페이지에서 함께 사용하는 플랫폼입니다.  
-      실제 서비스에 앞서, <strong>토큰·코인·블록체인 구조를 설계·검토하고 의견을 모으는 목적</strong>으로 사용합니다.
-    </p>
+  <div class="card">
+    <!-- 1단계: 설명 -->
+    <section id="step1" class="section active">
+      <h2 class="step-title">1단계. 개념 설명</h2>
+      <p class="step-sub">“부동산을 토큰으로 쪼개서, 거래 이력을 블록체인처럼 이어 붙이면 어떤 느낌일까?” 를 체험하는 단계입니다.</p>
 
-    <h2>2. 토큰 · 코인 생성 원칙 (현재 설정값 예시)</h2>
-    <ul>
-      <li>거주 기록 1건(폼 작성 + 저장) → 토큰 <span id="cfg-live">5</span></li>
-      <li>매매·임대 기록 1건(폼 작성 + 저장) → 토큰 <span id="cfg-trade">7</span></li>
-      <li>가상 건축·기술 기록 1건(폼 작성 + 저장) → 토큰 <span id="cfg-build">10</span></li>
-      <li>조회수 증가 1회 → 토큰 <span id="cfg-view">0.2</span></li>
-      <li>실거래 등록: 거래금액 <span id="cfg-dealUnit">10,000,000</span>원 당 코인 <span id="cfg-dealCoin">1</span></li>
-      <li>광고 등록: 광고시간 1시간당 토큰 <span id="cfg-adToken">1</span> / 시간당 광고단가 <span id="cfg-adRate">1,000</span>원</li>
-      <li>토큰 <span id="cfg-tokenPerCoin">10</span>개가 쌓일 때마다 코인 1개로 자동 전환</li>
-    </ul>
-    <p class="muted">
-      위 수치는 <strong>관리자(admin) 계정의 마이페이지</strong>에서 바꿀 수 있으며,  
-      이 페이지에는 “현재 공시된 값”만 보여줍니다.
-    </p>
-
-    <h2>3. 블록체인 개념 연결</h2>
-    <p>
-      “블록체인 개념” 탭에서는, 실제 메인넷과는 별개로  
-      <strong>거래 요약 → 블록 → 이전 블록 해시 연결</strong> 구조를 직접 만들어 보면서 구조를 확인할 수 있습니다.
-    </p>
-
-    <div class="ad-slot">
-      [광고 영역 예시 – 홈]  
-      이 위치에 향후 광고주 배너가 노출됩니다. (현재는 예시 문구만 표시)
-    </div>
-  </section>
-
-  <!-- 회원가입 -->
-  <section data-page-section="signup">
-    <h2>회원가입</h2>
-    <p>
-      이 화면에서 <strong>아이디 / 비밀번호 / 이름(실명)</strong>을 등록합니다.  
-      한 번 등록된 아이디는 같은 비밀번호로만 로그인할 수 있습니다.
-    </p>
-
-    <div class="input-box">
-      <div class="input-row">
-        <div>
-          <label for="reg-id">아이디</label>
-          <input id="reg-id" placeholder="예) jung">
-        </div>
-        <div>
-          <label for="reg-name">이름(실명)</label>
-          <input id="reg-name" placeholder="예) 이정린">
-        </div>
+      <div class="info-box">
+        <div class="tag">연습용</div>
+        <div class="tag">실제 코인·투자 아님</div>
+        <div class="tag">브라우저(LocalStorage)에만 저장</div>
       </div>
-      <div class="input-row">
-        <div>
-          <label for="reg-pw">비밀번호</label>
-          <input id="reg-pw" type="password" placeholder="예) sam377">
-        </div>
-        <div>
-          <label for="reg-pw2">비밀번호 확인</label>
-          <input id="reg-pw2" type="password" placeholder="다시 한번 입력">
-        </div>
-      </div>
-      <button class="btn-small" id="btnRegister">회원가입</button>
-      <div class="muted">
-        - 아이디는 이 브라우저 안에서만 유일하게 사용됩니다.<br>
-        - 가입 후에는 상단 로그인 창에서 같은 아이디/비밀번호로 접속합니다.
-      </div>
-    </div>
 
-    <div class="card">
-      <h3>※ 실명·본인인증에 대하여</h3>
-      <p>
-        현재 버전은 <strong>이 브라우저에서만 동작하는 개인 실험용 도구</strong>입니다.  
-        실제 주민등록 실명인증/휴대폰 본인인증은 서버·인증업체 연동이 필요하며  
-        추후 <strong>서버 · DB · 블록체인 단계</strong>에서 별도로 구현하게 됩니다.
+      <h3>① 이 사이트에서 하는 일</h3>
+      <ul>
+        <li>부동산 1개(예: 오피스텔 1채)를 가상의 <strong>디지털 자산(토큰)</strong>으로 상상합니다.</li>
+        <li>이 자산을 여러 개의 <strong>토큰 단위</strong>로 나누어 본다고 가정합니다. (예: 10,000개)</li>
+        <li>임대·매매 등 거래가 발생할 때마다, <strong>블록(Block)</strong>으로 기록을 남깁니다.</li>
+        <li>각 블록은 이전 블록의 해시를 포함하여 <strong>체인(Chain) 구조</strong>가 됩니다.</li>
+      </ul>
+
+      <h3>② 간단한 구조</h3>
+      <ul>
+        <li>부동산 기본 정보 → 2단계에서 입력</li>
+        <li>거래(예: “101동 1001호 보증금 1,000만 원 인상”) → 3단계에서 블록으로 기록</li>
+        <li>각 블록에는 <strong>시간, 제목, 참여자, 설명, 금액, 이전 해시, 현재 해시</strong>가 들어갑니다.</li>
+      </ul>
+
+      <h3>③ 실제 서비스로 확장할 때 상상해 볼 수 있는 것</h3>
+      <ul>
+        <li>토큰 수량에 따라 소유·수익 분배 구조 설계</li>
+        <li>임대료 입금 내역을 자동으로 블록 체인에 기록</li>
+        <li>투자자별 지분 비율·수익률 대시보드</li>
+      </ul>
+
+      <p class="small" style="margin-top:10px;">
+        → 이제 아래 탭에서 <strong>2단계 “부동산 정보 입력”</strong>을 눌러 실제로 값을 넣어 보세요.
       </p>
-    </div>
-  </section>
+    </section>
 
-  <!-- 거주 -->
-  <section data-page-section="live">
-    <h2>거주 기록 등록</h2>
-    <p>실제 거주 중인 집의 기본 정보를 아래 양식에 기록해 둡니다.</p>
+    <!-- 2단계: 부동산 정보 입력 -->
+    <section id="step2" class="section">
+      <h2 class="step-title">2단계. 부동산 정보 입력</h2>
+      <p class="step-sub">기준이 되는 부동산 1개를 설정합니다. 이 정보가 3단계 블록체인 기록의 “기본 배경”이 됩니다.</p>
 
-    <div class="input-box">
-      <div class="input-row">
-        <div>
-          <label for="live-address">주소 / 단지명</label>
-          <input id="live-address" placeholder="예) 서울시 ○○구 ○○동, ○○아파트">
+      <form id="property-form" onsubmit="return false;">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="prop-name">부동산 이름 / 별칭</label>
+            <input id="prop-name" placeholder="예) 강남 오피스텔 101동" />
+          </div>
+          <div class="form-field">
+            <label for="prop-location">위치</label>
+            <input id="prop-location" placeholder="예) 서울시 강남구 ○○로 00" />
+          </div>
+          <div class="form-field">
+            <label for="prop-total-tokens">가상 토큰 총 발행량 (개)</label>
+            <input id="prop-total-tokens" type="number" placeholder="예) 10000" />
+          </div>
+          <div class="form-field">
+            <label for="prop-owner">기본 소유자 / 관리자 이름</label>
+            <input id="prop-owner" placeholder="예) jung / 운영자" />
+          </div>
         </div>
-        <div>
-          <label for="live-type">주택 종류</label>
-          <input id="live-type" placeholder="예) 아파트 34평, 단독주택 2층 등">
+
+        <div class="form-field">
+          <label for="prop-memo">간단 메모 (선택)</label>
+          <textarea id="prop-memo" placeholder="예) 연습용 가상 부동산입니다. 실제 권리와 무관합니다."></textarea>
         </div>
+
+        <div class="btn-row">
+          <button class="primary" type="button" onclick="saveProperty()">부동산 정보 저장</button>
+          <button class="secondary" type="button" onclick="clearProperty()">입력값 지우기</button>
+        </div>
+      </form>
+
+      <div id="prop-summary" class="prop-summary" style="display:none;"></div>
+
+      <div class="info-box small">
+        <strong>안내</strong><br />
+        · 이 단계에서 저장한 정보는 브라우저(LocalStorage)에만 저장됩니다.<br />
+        · 페이지를 새로 열어도 같은 브라우저·같은 PC에서는 다시 불러와집니다.<br />
+        · 다른 사람과 “같이 써보는 테스트”라면, 동일한 정보를 입력한 뒤 3단계에서 블록을 추가해 보세요.
       </div>
-      <div class="input-row">
-        <div>
-          <label for="live-size">전용면적 / 방 개수</label>
-          <input id="live-size" placeholder="예) 84㎡, 방3 · 욕실2">
-        </div>
-        <div>
-          <label for="live-cost">월 생활비 / 관리비</label>
-          <input id="live-cost" placeholder="예) 관리비 20만, 난방비 겨울 평균 15만 등">
-        </div>
+
+      <p class="small" style="margin-top:6px;">
+        → 부동산 정보 저장 후 <strong>3단계 “블록체인 체험”</strong 탭으로 이동하면, 입력한 정보가 상단에 요약 표시됩니다.
+      </p>
+    </section>
+
+    <!-- 3단계: 블록체인 체험 -->
+    <section id="step3" class="section">
+      <h2 class="step-title">3단계. 블록체인 체험</h2>
+      <p class="step-sub">거래나 메모를 블록으로 기록해 보면서, “이전 해시”와 “현재 해시”가 어떻게 이어지는지 체험합니다.</p>
+
+      <div id="chain-prop-info" class="info-box small">
+        아직 2단계에서 부동산 정보를 저장하지 않았습니다.<br />
+        → 먼저 위 탭에서 <strong>2단계</strong>를 선택하고 부동산 정보를 입력·저장해 주세요.
       </div>
-      <label for="note-live">거주 후기 / 장단점</label>
-      <textarea id="note-live" placeholder="예) 채광 좋고 방음 양호, 주차공간 부족 등"></textarea>
-      <button class="btn-small" data-form="live">거주 기록 저장 (토큰 지급)</button>
-      <div class="muted">
-        저장 시 이 아이디 기준으로 거주 기록이 보관되고, 관리자 설정값에 따라 토큰이 자동 지급됩니다.
+
+      <form id="block-form" onsubmit="return false;" style="margin-top:12px;">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="blk-title">거래 제목</label>
+            <input id="blk-title" placeholder="예) 101동 1001호 보증금 조정" />
+          </div>
+          <div class="form-field">
+            <label for="blk-actor">참여자 / 계정</label>
+            <input id="blk-actor" placeholder="예) 임대인 jung / 임차인 kim" />
+          </div>
+          <div class="form-field">
+            <label for="blk-amount">거래 금액 (원)</label>
+            <input id="blk-amount" type="number" placeholder="예) 10000000" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="blk-detail">상세 내용 / 메모</label>
+          <textarea id="blk-detail" placeholder="예) 보증금 1,000만 원 인상. 월세 동일 유지. 합의일 2025-11-30."></textarea>
+        </div>
+
+        <div class="btn-row">
+          <button class="primary" type="button" onclick="addBlock()">새 블록 추가</button>
+          <button class="secondary" type="button" onclick="reloadChain()">체인 새로고침</button>
+          <button class="danger" type="button" onclick="resetChain()">체인 초기화 (연습 데이터 삭제)</button>
+        </div>
+      </form>
+
+      <div id="chain-summary" class="chain-summary" style="margin-top:12px;">
+        <!-- JS에서 내용 채움 -->
       </div>
-    </div>
 
-    <div class="ad-slot">
-      [광고 영역 – 거주]  
-      예: 단열·창호·보일러 업체 광고가 들어올 수 있는 자리입니다.
-    </div>
-  </section>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:32px;">#</th>
+            <th style="width:90px;">시간</th>
+            <th style="width:120px;">제목</th>
+            <th style="width:90px;">참여자</th>
+            <th>내용</th>
+            <th style="width:90px;">이전 해시</th>
+            <th style="width:90px;">현재 해시</th>
+          </tr>
+        </thead>
+        <tbody id="chain-body">
+          <!-- JS에서 블록 목록 렌더링 -->
+        </tbody>
+      </table>
 
-  <!-- 매매·임대 -->
-  <section data-page-section="trade">
-    <h2>매매 · 임대 기록 및 실거래 등록</h2>
-    <p>매매/전세/월세/펜션 운영에 대한 정보를 아래 양식으로 기록합니다.</p>
-
-    <div class="input-box">
-      <div class="input-row">
-        <div>
-          <label for="trade-address">매물 주소 / 건물명</label>
-          <input id="trade-address" placeholder="예) 부산시 ○○구 ○○동, ○○빌라">
-        </div>
-        <div>
-          <label for="trade-type">거래 유형</label>
-          <input id="trade-type" placeholder="예) 매매 / 전세 / 월세 / 펜션">
-        </div>
-      </div>
-      <div class="input-row">
-        <div>
-          <label for="trade-price">희망가 / 보증금</label>
-          <input id="trade-price" placeholder="예) 매매 5억, 전세 3억 등">
-        </div>
-        <div>
-          <label for="trade-contact">연락처</label>
-          <input id="trade-contact" placeholder="예) 010-0000-0000, 카톡ID 등">
-        </div>
-      </div>
-      <label for="note-trade">비고 / 특약 / 링크</label>
-      <textarea id="note-trade" placeholder="예) 관리비 별도, 수리 조건, 외부 매물 링크 등"></textarea>
-      <button class="btn-small" data-form="trade">매매·임대 기록 저장 (토큰 지급)</button>
-      <div class="muted">
-        저장 시 이 아이디 기준으로 기록이 보관되고, 관리자 설정값에 따라 토큰이 자동 지급됩니다.
-      </div>
-    </div>
-
-    <h3>실거래 등록 (회원 간 실제 거래가 있다고 가정)</h3>
-    <div class="input-box">
-      <div class="input-row">
-        <div>
-          <label for="deal-amount">거래 금액 (원)</label>
-          <input id="deal-amount" type="number" placeholder="예) 300000000 (3억)">
-        </div>
-        <div>
-          <label for="deal-memo">거래 메모</label>
-          <input id="deal-memo" placeholder="예) 101동 1001호 매매, 구매자 jung / 판매자 kim 등">
-        </div>
-      </div>
-      <button class="btn-small" id="btnDeal">실거래 등록 (금액 비례 코인 지급)</button>
-      <div class="muted">
-        예시 규칙: 설정된 금액(cfg-dealUnit)당 코인 1개.  
-        (예: 1,000만원 단위로 설정 시 3억 거래 → 코인 30개, 마이페이지에 누적)
-      </div>
-    </div>
-
-    <h3>조회수에 따른 토큰 지급</h3>
-    <div class="input-box">
-      <label>매물 조회수</label>
-      <p>아래 버튼을 눌러 조회수가 늘었다고 가정합니다. 조회수에 비례해 토큰이 자동 추가됩니다.</p>
-      <button class="btn-small" id="btnView">조회수 +1 (토큰 누적)</button>
-      <p class="muted">현재 누적 조회수: <span id="viewCount">0</span>회</p>
-    </div>
-
-    <div class="ad-slot">
-      [광고 영역 – 매매·임대]  
-      예: 중개사무소, 금융/대출 상품, 인테리어 업체 광고 위치.
-    </div>
-  </section>
-
-  <!-- 가상 건축·기술 -->
-  <section data-page-section="build">
-    <h2>가상 건축 · 기술 공유 기록</h2>
-    <p>가상의 건축 프로젝트나 기술 노하우를 정리하는 양식입니다. 부동산을 직접 소유하지 않아도 참여할 수 있습니다.</p>
-
-    <div class="input-box">
-      <div class="input-row">
-        <div>
-          <label for="build-title">프로젝트 / 기술 제목</label>
-          <input id="build-title" placeholder="예) 30평 단독주택 패시브하우스 설계">
-        </div>
-        <div>
-          <label for="build-location">대지 / 적용 위치</label>
-          <input id="build-location" placeholder="예) 강원도 ○○군, 남향 경사지 등">
-        </div>
-      </div>
-      <div class="input-row">
-        <div>
-          <label for="build-budget">예상 공사비 / 예산</label>
-          <input id="build-budget" placeholder="예) 3억~3억5천 예상">
-        </div>
-        <div>
-          <label for="build-link">설계 도면/문서 링크</label>
-          <input id="build-link" placeholder="예) 노션/구글문서/드롭박스 링크">
-        </div>
-      </div>
-      <label for="note-build">설명 / 기술 포인트</label>
-      <textarea id="note-build" placeholder="예) 단열재, 창호, 난방 시스템, 발수제 시공 방법 등"></textarea>
-      <button class="btn-small" data-form="build">가상 건축·기술 기록 저장 (토큰 지급)</button>
-      <div class="muted">
-        저장 시 이 아이디 기준으로 기록이 보관되고, 관리자 설정값에 따라 토큰이 자동 지급됩니다.
-      </div>
-    </div>
-
-    <div class="ad-slot">
-      [광고 영역 – 가상 건축]  
-      예: 설계사무소, 구조기술사, 자재 브랜드 광고 영역.
-    </div>
-  </section>
-
-  <!-- 블록체인 개념 -->
-  <section data-page-section="chain">
-    <h2>블록체인 개념 · 부동산 기록 연결</h2>
-    <p>
-      실제 메인넷과는 별개로, <strong>이 브라우저 안에서만 동작하는 미니 블록체인 구조</strong>입니다.  
-      “블록 추가”를 누를 때마다 이전 블록 해시와 연결된 새 블록이 만들어집니다.
-    </p>
-
-    <p>
-      현재 블록 개수: <strong><span id="chainCount">0</span>개</strong><br>
-      마지막 블록 해시: <code id="chainLastHash">-</code>
-    </p>
-
-    <div class="input-box">
-      <div class="input-row">
-        <div>
-          <label for="chain-title">블록 제목 / 구분</label>
-          <input id="chain-title" placeholder="예) 2025-01-01 거주 기록 요약">
-        </div>
-        <div>
-          <label for="chain-ref">참고 정보 (선택)</label>
-          <input id="chain-ref" placeholder="예) jung 계정, 매물ID 등">
-        </div>
-      </div>
-      <label for="chain-data">블록에 담을 내용(요약)</label>
-      <textarea id="chain-data" placeholder="예) 서울 ○○아파트 101동 1001호 실거래 3억, jung→kim, 조회수 120회, 토큰/코인 변동 등"></textarea>
-      <button class="btn-small" id="btnAddBlock">블록 추가</button>
-      <div class="muted">
-        - 이 블록 체인은 실제 공개 블록체인이 아니고, 구조를 확인하기 위한 개인용 예시입니다.<br>
-        - 나중에 NFT·가상화폐로 확장할 때 기본 구조 설계 참고용으로 사용할 수 있습니다.
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>블록 리스트 (최신이 아래쪽)</h3>
-      <div id="chainList" class="muted">
-        아직 생성된 블록이 없습니다. “블록 추가” 버튼을 눌러 첫 블록을 만들어 보세요.
-      </div>
-    </div>
-  </section>
-
-  <!-- 토큰·코인 계정 -->
-  <section data-page-section="token">
-    <h2>토큰 · 코인 계정</h2>
-    <p id="tokenInfo">현재 토큰: 0개 / 코인: 0개</p>
-    <p>이 계정은 관리자 설정값에 따라 자동 계산되는 토큰·코인 계정입니다.</p>
-    <p>
-      내 코인용 해시값(식별 문자열):<br>
-      <code id="hashValue">-</code>
-    </p>
-    <p class="muted">
-      위 값은 아이디와 랜덤값을 조합한 문자열입니다.
-      실제 메인넷 해시가 아니며, 개념 확인용입니다.
-    </p>
-
-    <h3>수동 토큰 지급 버튼 (테스트용)</h3>
-    <p class="muted">아래 버튼은 규칙과 상관없이 테스트용으로 토큰을 추가해 볼 때 사용합니다.</p>
-    <button class="action-btn" data-action="test-1" data-token="1">
-      토큰 +1 (테스트용)
-    </button>
-
-    <div class="ad-slot">
-      [광고 영역 – 토큰·코인]  
-      예: 블록체인 교육, 세미나, 설명회 광고 영역.
-    </div>
-  </section>
-
-  <!-- 마이페이지 -->
-  <section data-page-section="mypage">
-    <h2>마이페이지 (회원별 실적 · 광고 관리 메모)</h2>
-    <p>
-      현재 로그인한 아이디 기준으로 토큰·코인 실적과 광고 정보를 확인합니다.
-    </p>
-
-    <p>
-      현재 아이디: <strong id="myUser">-</strong><br>
-      누적 토큰: <strong id="myToken">0</strong>개 · 누적 코인: <strong id="myCoin">0</strong>개<br>
-      거래 누적 금액: <strong id="myVolume">0</strong>원<br>
-      조회수 누적: <strong id="myViews">0</strong>회<br>
-      광고 이용 금액(내가 낸 광고비): <strong id="myAdSpend">0</strong>원
-    </p>
-
-    <hr style="border-color:rgba(148,163,184,.4);margin:12px 0;">
-
-    <h3>광고 등록 (광고주용)</h3>
-    <div class="input-box">
-      <div class="input-row">
-        <div>
-          <label for="ad-title">광고 제목</label>
-          <input id="ad-title" placeholder="예) ○○단열 창호 시공 이벤트">
-        </div>
-        <div>
-          <label for="ad-link">광고 링크(URL)</label>
-          <input id="ad-link" placeholder="예) https://...">
-        </div>
-      </div>
-      <div class="input-row">
-        <div>
-          <label for="ad-hours">광고 시간 (시간 단위)</label>
-          <input id="ad-hours" type="number" placeholder="예) 24">
-        </div>
-        <div>
-          <label>현재 광고 단가 (시간당, 관리자 설정)</label>
-          <input id="ad-rate" type="number" readonly>
-        </div>
-      </div>
-      <button class="btn-small" id="btnAd">광고 등록 (광고비 계산 + 광고주 토큰 지급)</button>
-      <div class="muted">
-        광고비 = 시간 × 단가. 광고비는 관리자용 합계에도 누적되며,  
-        광고주 본인에게는 광고시간에 비례한 토큰이 지급됩니다.
-      </div>
-    </div>
-
-    <h3>관리자용 광고 합계 (아이디가 admin일 때)</h3>
-    <p class="muted">
-      아이디를 <strong>admin</strong>으로 로그인하면 아래 “전체 광고비 합계”와  
-      토큰·코인 규칙 설정을 수정할 수 있습니다.
-    </p>
-    <p>
-      전체 광고비 합계 (모든 회원): <strong id="totalAd">관리자(admin) 로그인 시 표시</strong>
-    </p>
-
-    <div class="input-box">
-      <h4 style="margin:0 0 6px;font-size:13px;">토큰·코인 규칙 설정 (관리자 전용)</h4>
-      <div class="input-row">
-        <div>
-          <label for="cfg-liveToken-input">거주 기록 1건당 토큰</label>
-          <input id="cfg-liveToken-input" type="number" step="0.1">
-        </div>
-        <div>
-          <label for="cfg-tradeToken-input">매매·임대 기록 1건당 토큰</label>
-          <input id="cfg-tradeToken-input" type="number" step="0.1">
-        </div>
-      </div>
-      <div class="input-row">
-        <div>
-          <label for="cfg-buildToken-input">가상 건축·기술 1건당 토큰</label>
-          <input id="cfg-buildToken-input" type="number" step="0.1">
-        </div>
-        <div>
-          <label for="cfg-viewToken-input">조회수 1회당 토큰</label>
-          <input id="cfg-viewToken-input" type="number" step="0.01">
-        </div>
-      </div>
-      <div class="input-row">
-        <div>
-          <label for="cfg-dealUnit-input">실거래 코인 기준금액(원)</label>
-          <input id="cfg-dealUnit-input" type="number">
-        </div>
-        <div>
-          <label for="cfg-tokenPerCoin-input">코인 1개당 필요한 토큰 수</label>
-          <input id="cfg-tokenPerCoin-input" type="number" step="1">
-        </div>
-      </div>
-      <div class="input-row">
-        <div>
-          <label for="cfg-adTokenPerHour-input">광고시간 1시간당 토큰</label>
-          <input id="cfg-adTokenPerHour-input" type="number" step="0.1">
-        </div>
-        <div>
-          <label for="cfg-adRate-input">광고 단가 (시간당 원)</label>
-          <input id="cfg-adRate-input" type="number" step="1">
-        </div>
-      </div>
-      <button class="btn-small" id="btnCfgSave">규칙 저장 (admin)</button>
-      <div class="muted">
-        admin 계정에서만 수정 가능. 수정 후 저장하면 홈·각 페이지의 계산에 즉시 반영됩니다.
-      </div>
-    </div>
-
-    <div class="input-box">
-      <label for="note-memo">광고 관리 · 수익 관련 메모 (현재 아이디 전용)</label>
-      <textarea id="note-memo" placeholder="예) 광고단가 초안, 광고주 후보 리스트, 수익 분배 아이디어 등"></textarea>
-      <button class="btn-small" data-note="memo">마이페이지 메모 저장</button>
-      <div class="muted">
-        실제 광고 정산·수익 관리는 별도의 회계 시스템에서 진행하고,  
-        이 페이지에는 개요와 아이디어만 기록하는 용도로 사용합니다.
-      </div>
-    </div>
-
-    <div class="ad-slot">
-      [광고 영역 – 마이페이지]  
-      예: 운영자 공지, 프리미엄 광고주 전용 배너 위치.
-    </div>
-  </section>
-</main>
+      <p class="small" style="margin-top:8px;">
+        · “체인 초기화”를 누르면 이 브라우저에 저장된 연습 데이터가 모두 삭제되고, 제네시스(0번) 블록만 다시 생성됩니다.<br />
+        · 실제 서비스로 확장하려면, 이 구조를 기반으로 서버·지갑·권한 관리 등을 추가 설계해야 합니다.
+      </p>
+    </section>
+  </div>
+</div>
 
 <script>
-  const DEFAULT_CONFIG = {
-    liveToken: 5,
-    tradeToken: 7,
-    buildToken: 10,
-    viewToken: 0.2,
-    dealUnit: 10000000,
-    tokenPerCoin: 10,
-    adTokenPerHour: 1,
-    adRate: 1000
-  };
+  // --- 간단한 상태 관리 ---
+  const STORAGE_PROP_KEY = "realEstateProperty_v1";
+  const STORAGE_CHAIN_KEY = "realEstateChain_v1";
+  let currentProperty = null;
+  let chain = [];
 
-  const USERS_KEY   = "bcs_users_v7";
-  const GLOBAL_KEY  = "bcs_global_v3";
-  const CURRENT_KEY = "bcs_current_id_v3";
-
-  let users = {};
-  let globalState = { totalAdRevenue: 0, config: null, chain: [] };
-  let currentId = "";
-
-  function simpleHash(str){
-    let h = 0, i, chr;
-    if(str.length === 0) return "0";
-    for(i=0;i<str.length;i++){
-      chr = str.charCodeAt(i);
-      h = ((h << 5) - h) + chr;
-      h |= 0;
-    }
-    return "H" + (h >>> 0).toString(16);
+  // --- 탭(단계) 이동 ---
+  function showStep(stepNum) {
+    document.querySelectorAll(".steps-nav button").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.step === String(stepNum));
+    });
+    document.querySelectorAll(".section").forEach(sec => {
+      sec.classList.toggle("active", sec.id === "step" + stepNum);
+    });
   }
 
-  function ensureConfig(){
-    if(!globalState || typeof globalState !== "object"){
-      globalState = { totalAdRevenue:0, config:null, chain:[] };
+  document.querySelectorAll(".steps-nav button").forEach(btn => {
+    btn.addEventListener("click", () => showStep(btn.dataset.step));
+  });
+
+  // --- 단순 해시 함수 (연습용) ---
+  function simpleHash(str) {
+    let hash = 0x811c9dc5;
+    for (let i = 0; i < str.length; i++) {
+      hash ^= str.charCodeAt(i);
+      hash = (hash * 16777619) >>> 0;
     }
-    if(!globalState.config){
-      globalState.config = Object.assign({}, DEFAULT_CONFIG);
-    }else{
-      globalState.config = Object.assign({}, DEFAULT_CONFIG, globalState.config);
+    return hash.toString(16);
+  }
+
+  // --- 2단계: 부동산 정보 저장/불러오기 ---
+  function saveProperty() {
+    const name = document.getElementById("prop-name").value.trim();
+    const location = document.getElementById("prop-location").value.trim();
+    const totalTokens = document.getElementById("prop-total-tokens").value.trim();
+    const owner = document.getElementById("prop-owner").value.trim();
+    const memo = document.getElementById("prop-memo").value.trim();
+
+    if (!name) {
+      alert("부동산 이름(별칭)을 입력해 주세요.");
+      return;
+    }
+
+    currentProperty = { name, location, totalTokens, owner, memo };
+    localStorage.setItem(STORAGE_PROP_KEY, JSON.stringify(currentProperty));
+    renderPropertySummary();
+    alert("부동산 정보가 저장되었습니다. (이 브라우저에만 보관)");
+  }
+
+  function clearProperty() {
+    document.getElementById("property-form").reset();
+  }
+
+  function loadProperty() {
+    try {
+      const saved = localStorage.getItem(STORAGE_PROP_KEY);
+      if (!saved) return;
+      currentProperty = JSON.parse(saved);
+      // 입력칸에도 채워 넣기
+      document.getElementById("prop-name").value = currentProperty.name || "";
+      document.getElementById("prop-location").value = currentProperty.location || "";
+      document.getElementById("prop-total-tokens").value = currentProperty.totalTokens || "";
+      document.getElementById("prop-owner").value = currentProperty.owner || "";
+      document.getElementById("prop-memo").value = currentProperty.memo || "";
+      renderPropertySummary();
+    } catch (e) {
+      console.error(e);
     }
   }
 
-  function ensureChain(){
-    if(!globalState.chain || !Array.isArray(globalState.chain)){
-      globalState.chain = [];
+  function renderPropertySummary() {
+    const box = document.getElementById("prop-summary");
+    const chainBox = document.getElementById("chain-prop-info");
+    if (!currentProperty) {
+      box.style.display = "none";
+      chainBox.innerHTML = "아직 2단계에서 부동산 정보를 저장하지 않았습니다.<br />→ 먼저 위 탭에서 <strong>2단계</strong>를 선택하고 부동산 정보를 입력·저장해 주세요.";
+      return;
     }
-    if(globalState.chain.length === 0){
-      const genesis = {
-        index: 0,
-        timestamp: new Date().toISOString(),
-        title: "GENESIS",
-        ref: "",
-        data: "부동산 디지털 자산 플랫폼용 제네시스 블록",
-        prevHash: "0",
-        hash: "GENESIS"
-      };
-      globalState.chain.push(genesis);
-    }
+    box.style.display = "block";
+    box.innerHTML = `
+      <strong>저장된 부동산 정보</strong><br />
+      · 이름: ${currentProperty.name}<br />
+      · 위치: ${currentProperty.location || "-"}<br />
+      · 가상 토큰 발행량: ${currentProperty.totalTokens || "-"} 개<br />
+      · 소유자/관리자: ${currentProperty.owner || "-"}<br />
+      ${currentProperty.memo ? "· 메모: " + currentProperty.memo : ""}
+    `;
+
+    chainBox.innerHTML = `
+      <strong>현재 체험 중인 부동산</strong><br />
+      · ${currentProperty.name}${currentProperty.location ? " (" + currentProperty.location + ")" : ""}<br />
+      · 토큰 발행량(가정): ${currentProperty.totalTokens || "-"} 개<br />
+      · 관리자: ${currentProperty.owner || "-"}
+    `;
   }
 
-  function loadAll(){
-    const u = localStorage.getItem(USERS_KEY);
-    if(u){
-      try{ users = JSON.parse(u) || {}; }catch(e){ users = {}; }
-    }
-    const g = localStorage.getItem(GLOBAL_KEY);
-    if(g){
-      try{ globalState = Object.assign({totalAdRevenue:0, chain:[]}, JSON.parse(g)); }catch(e){}
-    }
-    ensureConfig();
-    ensureChain();
-    const cid = localStorage.getItem(CURRENT_KEY);
-    if(cid){ currentId = cid; }
-  }
-
-  function saveAll(){
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    localStorage.setItem(GLOBAL_KEY, JSON.stringify(globalState));
-    localStorage.setItem(CURRENT_KEY, currentId || "");
-  }
-
-  function createEmptyUser(id){
-    return {
-      id,
-      name: "",
-      pw: "",
-      token: 0,
-      coin: 0,
-      doneActions: [],
-      notes: {live:"",trade:"",build:"",memo:""},
-      liveForm: {},
-      tradeForm: {},
-      buildForm: {},
-      hash: "hash-" + id + "-" + Math.random().toString(36).slice(2,10),
-      tradeVolume: 0,
-      viewCount: 0,
-      adTokens: 0,
-      adSpend: 0
+  // --- 3단계: 체인 관리 ---
+  function initGenesisBlock() {
+    const genesis = {
+      index: 0,
+      timestamp: new Date().toISOString(),
+      title: "제네시스 블록",
+      actor: "system",
+      detail: "체인 시작",
+      amount: 0,
+      prevHash: "0",
+      hash: ""
     };
+    genesis.hash = simpleHash(JSON.stringify(genesis));
+    chain = [genesis];
   }
 
-  function getCurrentUser(){
-    if(!currentId) return null;
-    if(!users[currentId]) users[currentId] = createEmptyUser(currentId);
-    return users[currentId];
-  }
-
-  function addTokenToUser(user, amount){
-    if(!amount) return;
-    const cfg = globalState.config;
-    const perCoin = cfg.tokenPerCoin || 10;
-    user.token += amount;
-    while(user.token >= perCoin){
-      user.token -= perCoin;
-      user.coin += 1;
-    }
-  }
-
-  function applyNotesAndFormsToUI(user){
-    const notesIds = ["live","trade","build","memo"];
-    notesIds.forEach(key=>{
-      const el = document.getElementById("note-"+key);
-      if(el){
-        el.value = user && user.notes ? (user.notes[key] || "") : "";
-      }
-    });
-
-    if(user){
-      if(user.liveForm){
-        const f = user.liveForm;
-        const a = document.getElementById("live-address");
-        const t = document.getElementById("live-type");
-        const s = document.getElementById("live-size");
-        const c = document.getElementById("live-cost");
-        if(a) a.value = f.address || "";
-        if(t) t.value = f.type || "";
-        if(s) s.value = f.size || "";
-        if(c) c.value = f.cost || "";
-      }
-      if(user.tradeForm){
-        const f = user.tradeForm;
-        const a = document.getElementById("trade-address");
-        const t = document.getElementById("trade-type");
-        const p = document.getElementById("trade-price");
-        const c = document.getElementById("trade-contact");
-        if(a) a.value = f.address || "";
-        if(t) t.value = f.type || "";
-        if(p) p.value = f.price || "";
-        if(c) c.value = f.contact || "";
-      }
-      if(user.buildForm){
-        const f = user.buildForm;
-        const t = document.getElementById("build-title");
-        const l = document.getElementById("build-location");
-        const b = document.getElementById("build-budget");
-        const k = document.getElementById("build-link");
-        if(t) t.value = f.title || "";
-        if(l) l.value = f.location || "";
-        if(b) b.value = f.budget || "";
-        if(k) k.value = f.link || "";
-      }
-    }
-  }
-
-  function updateConfigDisplay(){
-    const cfg = globalState.config;
-    const setText = (id, val)=>{
-      const el = document.getElementById(id);
-      if(el) el.textContent = val;
-    };
-    setText("cfg-live", cfg.liveToken);
-    setText("cfg-trade", cfg.tradeToken);
-    setText("cfg-build", cfg.buildToken);
-    setText("cfg-view", cfg.viewToken);
-    setText("cfg-dealUnit", cfg.dealUnit.toLocaleString());
-    setText("cfg-dealCoin", 1);
-    setText("cfg-adToken", cfg.adTokenPerHour);
-    setText("cfg-adRate", cfg.adRate.toLocaleString());
-    setText("cfg-tokenPerCoin", cfg.tokenPerCoin);
-
-    const ids = {
-      "cfg-liveToken-input": cfg.liveToken,
-      "cfg-tradeToken-input": cfg.tradeToken,
-      "cfg-buildToken-input": cfg.buildToken,
-      "cfg-viewToken-input": cfg.viewToken,
-      "cfg-dealUnit-input": cfg.dealUnit,
-      "cfg-tokenPerCoin-input": cfg.tokenPerCoin,
-      "cfg-adTokenPerHour-input": cfg.adTokenPerHour,
-      "cfg-adRate-input": cfg.adRate
-    };
-    Object.keys(ids).forEach(id=>{
-      const el = document.getElementById(id);
-      if(el) el.value = ids[id];
-    });
-
-    const adRateEl = document.getElementById("ad-rate");
-    if(adRateEl){
-      adRateEl.value = cfg.adRate;
-      adRateEl.readOnly = true;
-    }
-
-    const isAdmin = (currentId === "admin");
-    const cfgButton = document.getElementById("btnCfgSave");
-    Object.keys(ids).forEach(id=>{
-      const el = document.getElementById(id);
-      if(el) el.readOnly = !isAdmin;
-    });
-    if(cfgButton){
-      cfgButton.disabled = !isAdmin;
-    }
-  }
-
-  function updateChainUI(){
-    ensureChain();
-    const chain = globalState.chain;
-    const countEl = document.getElementById("chainCount");
-    const lastHashEl = document.getElementById("chainLastHash");
-    const listEl = document.getElementById("chainList");
-    if(countEl) countEl.textContent = chain.length;
-    if(lastHashEl) lastHashEl.textContent = chain[chain.length-1].hash;
-
-    if(!listEl) return;
-    if(chain.length === 0){
-      listEl.textContent = "아직 생성된 블록이 없습니다.";
-      return;
-    }
-    let html = "";
-    chain.forEach(b=>{
-      html += `
-        <div class="chain-block">
-          <div><strong>인덱스:</strong> ${b.index}</div>
-          <div><strong>시간:</strong> ${b.timestamp}</div>
-          <div><strong>제목:</strong> ${b.title || ""}</div>
-          ${b.ref ? `<div><strong>참고:</strong> ${b.ref}</div>` : ""}
-          <div><strong>데이터:</strong> ${b.data}</div>
-          <div><strong>이전 해시:</strong> <code>${b.prevHash}</code></div>
-          <div><strong>현재 해시:</strong> <code>${b.hash}</code></div>
-        </div>
-      `;
-    });
-    listEl.innerHTML = html;
-  }
-
-  function updateUI(){
-    const user = getCurrentUser();
-    const cfg  = globalState.config;
-
-    const tokenInfo = document.getElementById("tokenInfo");
-    if(tokenInfo){
-      const t = user ? user.token : 0;
-      const c = user ? user.coin : 0;
-      tokenInfo.textContent = `현재 토큰: ${t}개 / 코인: ${c}개`;
-    }
-
-    const status = document.getElementById("statusText");
-    if(user && currentId){
-      const name = user.name || "(이름 미등록)";
-      status.innerHTML =
-        `현재 아이디: <strong>${currentId}</strong> / 이름: <strong>${name}</strong> · 토큰: <strong>${user.token}개</strong> · 코인: <strong>${user.coin}개</strong> (이 브라우저에만 저장)`;
-    }else{
-      status.textContent =
-        "아직 로그인 전입니다. 가입은 위의 '회원가입' 탭에서 진행한 뒤, 아이디·비밀번호로 로그인해 주세요.";
-    }
-
-    const myUser   = document.getElementById("myUser");
-    const myToken  = document.getElementById("myToken");
-    const myCoin   = document.getElementById("myCoin");
-    const myVolume = document.getElementById("myVolume");
-    const myViews  = document.getElementById("myViews");
-    const myAdSpend= document.getElementById("myAdSpend");
-
-    if(user){
-      const name = user.name ? `(${user.name})` : "";
-      if(myUser)   myUser.textContent   = currentId + " " + name;
-      if(myToken)  myToken.textContent  = user.token.toFixed(2).replace(/\.00$/,"");
-      if(myCoin)   myCoin.textContent   = user.coin.toFixed(2).replace(/\.00$/,"");
-      if(myVolume) myVolume.textContent = user.tradeVolume.toLocaleString();
-      if(myViews)  myViews.textContent  = user.viewCount;
-      if(myAdSpend)myAdSpend.textContent= user.adSpend.toLocaleString();
-    }else{
-      if(myUser)   myUser.textContent   = "-";
-      if(myToken)  myToken.textContent  = "0";
-      if(myCoin)   myCoin.textContent   = "0";
-      if(myVolume) myVolume.textContent = "0";
-      if(myViews)  myViews.textContent  = "0";
-      if(myAdSpend)myAdSpend.textContent= "0";
-    }
-
-    const hashEl = document.getElementById("hashValue");
-    if(hashEl){
-      hashEl.textContent = user ? user.hash : "-";
-    }
-
-    const viewEl = document.getElementById("viewCount");
-    if(viewEl){
-      viewEl.textContent = user ? user.viewCount : 0;
-    }
-
-    const totalAdEl = document.getElementById("totalAd");
-    if(totalAdEl){
-      if(currentId === "admin"){
-        totalAdEl.textContent = globalState.totalAdRevenue.toLocaleString() + "원";
-      }else{
-        totalAdEl.textContent = "관리자(admin) 로그인 시 표시";
-      }
-    }
-
-    applyNotesAndFormsToUI(user);
-    document.querySelectorAll(".action-btn").forEach(btn=>{
-      const actionId = btn.dataset.action;
-      if(user && user.doneActions.includes(actionId)){
-        btn.classList.add("done");
-      }else{
-        btn.classList.remove("done");
-      }
-    });
-
-    updateConfigDisplay();
-    updateChainUI();
-  }
-
-  function setPage(page){
-    document.querySelectorAll(".tab").forEach(tab=>{
-      tab.classList.toggle("active", tab.dataset.page === page);
-    });
-    document.querySelectorAll("[data-page-section]").forEach(sec=>{
-      sec.style.display = (sec.dataset.pageSection === page ? "block" : "none");
-    });
-  }
-
-  loadAll();
-  updateUI();
-  setPage("home");
-
-  // 로그인
-  document.getElementById("btnLogin").addEventListener("click", ()=>{
-    const id   = document.getElementById("userId").value.trim();
-    const pw   = document.getElementById("userPw").value.trim();
-
-    if(!id || !pw){
-      alert("아이디와 비밀번호를 입력해 주세요. (회원가입은 '회원가입' 탭에서 먼저 진행)");
-      return;
-    }
-
-    if(!users[id]){
-      alert("등록되지 않은 아이디입니다. 먼저 '회원가입' 탭에서 가입해 주세요.");
-      return;
-    }
-
-    const user = users[id];
-    if(user.pw && user.pw !== pw){
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    currentId = id;
-    saveAll();
-    updateUI();
-    alert("로그인되었습니다.");
-  });
-
-  document.getElementById("btnLogout").addEventListener("click", ()=>{
-    currentId = "";
-    saveAll();
-    updateUI();
-    alert("로그아웃했습니다. (각 회원 데이터는 이 브라우저에 그대로 남아 있습니다.)");
-  });
-
-  // 탭 전환
-  document.querySelectorAll(".tab").forEach(tab=>{
-    tab.addEventListener("click", ()=>{
-      setPage(tab.dataset.page);
-    });
-  });
-
-  // 회원가입
-  document.getElementById("btnRegister").addEventListener("click", ()=>{
-    const id   = document.getElementById("reg-id").value.trim();
-    const name = document.getElementById("reg-name").value.trim();
-    const pw   = document.getElementById("reg-pw").value.trim();
-    const pw2  = document.getElementById("reg-pw2").value.trim();
-
-    if(!id || !name || !pw || !pw2){
-      alert("아이디, 이름, 비밀번호, 비밀번호 확인을 모두 입력해 주세요.");
-      return;
-    }
-    if(pw !== pw2){
-      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-      return;
-    }
-    if(users[id]){
-      alert("이미 존재하는 아이디입니다. 다른 아이디를 사용해 주세요.");
-      return;
-    }
-
-    users[id] = createEmptyUser(id);
-    users[id].name = name;
-    users[id].pw   = pw;
-
-    currentId = id;
-    saveAll();
-    updateUI();
-    alert("회원가입이 완료되었고 자동으로 로그인되었습니다.");
-  });
-
-  // 테스트용 토큰 버튼
-  document.querySelectorAll(".action-btn").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const user = getCurrentUser();
-      if(!user){
-        alert("먼저 로그인 해 주세요.");
-        return;
-      }
-      const actionId = btn.dataset.action;
-      const amount   = Number(btn.dataset.token || "0");
-
-      if(actionId !== "test-1"){
-        if(user.doneActions.includes(actionId)){
-          alert("이미 처리된 건입니다. 같은 기록으로 토큰이 다시 지급되지 않습니다.");
-          return;
+  function loadChain() {
+    try {
+      const saved = localStorage.getItem(STORAGE_CHAIN_KEY);
+      if (!saved) {
+        initGenesisBlock();
+        saveChain();
+      } else {
+        chain = JSON.parse(saved);
+        if (!Array.isArray(chain) || chain.length === 0) {
+          initGenesisBlock();
+          saveChain();
         }
-        user.doneActions.push(actionId);
       }
+    } catch (e) {
+      console.error(e);
+      initGenesisBlock();
+      saveChain();
+    }
+    renderChain();
+  }
 
-      addTokenToUser(user, amount);
-      saveAll();
-      updateUI();
+  function saveChain() {
+    localStorage.setItem(STORAGE_CHAIN_KEY, JSON.stringify(chain));
+  }
+
+  function reloadChain() {
+    loadChain();
+    alert("체인을 다시 불러왔습니다.");
+  }
+
+  function resetChain() {
+    if (!confirm("정말로 체인을 초기화할까요? (연습 데이터가 모두 삭제됩니다)")) return;
+    initGenesisBlock();
+    saveChain();
+    renderChain();
+    alert("체인이 초기화되었습니다. (제네시스 블록만 남음)");
+  }
+
+  function shortenHash(h) {
+    if (!h) return "";
+    return h.slice(0, 6) + "…" + h.slice(-4);
+  }
+
+  function renderChain() {
+    const tbody = document.getElementById("chain-body");
+    tbody.innerHTML = "";
+    chain.forEach(b => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${b.index}</td>
+        <td class="small">${b.timestamp.slice(0, 16).replace("T", " ")}</td>
+        <td>${b.title || ""}</td>
+        <td>${b.actor || ""}</td>
+        <td class="small">${b.detail || ""}</td>
+        <td class="hash">${shortenHash(b.prevHash)}</td>
+        <td class="hash">${shortenHash(b.hash)}${b.index === chain.length - 1 ? "<span class='pill'>HEAD</span>" : ""}</td>
+      `;
+      tbody.appendChild(tr);
     });
-  });
 
-  // 메모 저장 버튼
-  document.querySelectorAll("[data-note]").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const user = getCurrentUser();
-      if(!user){
-        alert("먼저 로그인 해 주세요.");
-        return;
-      }
-      const key = btn.dataset.note;
-      const el = document.getElementById("note-"+key);
-      if(!el) return;
-      user.notes[key] = el.value;
-      saveAll();
-      alert("메모가 저장되었습니다.");
-    });
-  });
+    const summaryEl = document.getElementById("chain-summary");
+    summaryEl.innerHTML = `
+      <strong>블록 개수:</strong> ${chain.length} 개
+      <span class="tag">제네시스(0번) 포함</span>
+      ${currentProperty ? `<span class="tag">부동산: ${currentProperty.name}</span>` : ""}
+    `;
+  }
 
-  // 양식 저장 버튼
-  document.querySelectorAll("[data-form]").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const user = getCurrentUser();
-      if(!user){
-        alert("먼저 로그인 해 주세요.");
-        return;
-      }
-      const cfg = globalState.config;
-      const key = btn.dataset.form;
+  function addBlock() {
+    const title = document.getElementById("blk-title").value.trim();
+    const actor = document.getElementById("blk-actor").value.trim();
+    const amount = document.getElementById("blk-amount").value.trim();
+    const detail = document.getElementById("blk-detail").value.trim();
 
-      if(key === "live"){
-        user.liveForm = {
-          address: document.getElementById("live-address").value,
-          type:    document.getElementById("live-type").value,
-          size:    document.getElementById("live-size").value,
-          cost:    document.getElementById("live-cost").value
-        };
-        user.notes.live = document.getElementById("note-live").value;
-        addTokenToUser(user, cfg.liveToken);
-      }else if(key === "trade"){
-        user.tradeForm = {
-          address: document.getElementById("trade-address").value,
-          type:    document.getElementById("trade-type").value,
-          price:   document.getElementById("trade-price").value,
-          contact: document.getElementById("trade-contact").value
-        };
-        user.notes.trade = document.getElementById("note-trade").value;
-        addTokenToUser(user, cfg.tradeToken);
-      }else if(key === "build"){
-        user.buildForm = {
-          title:    document.getElementById("build-title").value,
-          location: document.getElementById("build-location").value,
-          budget:   document.getElementById("build-budget").value,
-          link:     document.getElementById("build-link").value
-        };
-        user.notes.build = document.getElementById("note-build").value;
-        addTokenToUser(user, cfg.buildToken);
-      }
-      saveAll();
-      updateUI();
-      alert("기록이 저장되고 토큰이 지급되었습니다.");
-    });
-  });
-
-  // 실거래 등록
-  document.getElementById("btnDeal").addEventListener("click", ()=>{
-    const user = getCurrentUser();
-    if(!user){
-      alert("먼저 로그인 해 주세요.");
-      return;
-    }
-    const cfg = globalState.config;
-    const amt = Number(document.getElementById("deal-amount").value || "0");
-    if(!amt || amt <= 0){
-      alert("거래 금액을 숫자로 입력해 주세요.");
-      return;
-    }
-    const coinAdd = amt / (cfg.dealUnit || 10000000);
-    user.tradeVolume += amt;
-    user.coin += coinAdd;
-    saveAll();
-    updateUI();
-    alert(`실거래가 등록되었습니다. 코인 약 ${coinAdd.toFixed(2)}개가 지급되었습니다.`);
-  });
-
-  // 조회수
-  document.getElementById("btnView").addEventListener("click", ()=>{
-    const user = getCurrentUser();
-    if(!user){
-      alert("먼저 로그인 해 주세요.");
-      return;
-    }
-    const cfg = globalState.config;
-    user.viewCount += 1;
-    addTokenToUser(user, cfg.viewToken);
-    saveAll();
-    updateUI();
-  });
-
-  // 광고 등록
-  document.getElementById("btnAd").addEventListener("click", ()=>{
-    const user = getCurrentUser();
-    if(!user){
-      alert("먼저 로그인 해 주세요.");
-      return;
-    }
-    const cfg = globalState.config;
-    const title = document.getElementById("ad-title").value.trim();
-    const link  = document.getElementById("ad-link").value.trim();
-    const hours = Number(document.getElementById("ad-hours").value || "0");
-
-    if(!title || !hours || hours <= 0){
-      alert("광고 제목과 시간을 올바르게 입력해 주세요.");
+    if (!title && !detail) {
+      alert("거래 제목이나 상세 내용을 적어 주세요.");
       return;
     }
 
-    const rate = cfg.adRate;
-    const cost = hours * rate;
-    user.adSpend += cost;
-    globalState.totalAdRevenue += cost;
-
-    addTokenToUser(user, cfg.adTokenPerHour * hours);
-    saveAll();
-    updateUI();
-
-    alert(`광고가 등록되었습니다. 광고비 ${cost.toLocaleString()}원, 토큰 ${(cfg.adTokenPerHour * hours).toFixed(2)}개 지급.`);
-  });
-
-  // 규칙 저장 (관리자)
-  document.getElementById("btnCfgSave").addEventListener("click", ()=>{
-    if(currentId !== "admin"){
-      alert("관리자(admin) 계정에서만 수정할 수 있습니다.");
-      return;
-    }
-    const cfg = globalState.config;
-    const val = id => Number(document.getElementById(id).value || "0");
-
-    cfg.liveToken      = val("cfg-liveToken-input")     || DEFAULT_CONFIG.liveToken;
-    cfg.tradeToken     = val("cfg-tradeToken-input")    || DEFAULT_CONFIG.tradeToken;
-    cfg.buildToken     = val("cfg-buildToken-input")    || DEFAULT_CONFIG.buildToken;
-    cfg.viewToken      = Number(document.getElementById("cfg-viewToken-input").value || DEFAULT_CONFIG.viewToken);
-    cfg.dealUnit       = val("cfg-dealUnit-input")      || DEFAULT_CONFIG.dealUnit;
-    cfg.tokenPerCoin   = val("cfg-tokenPerCoin-input")  || DEFAULT_CONFIG.tokenPerCoin;
-    cfg.adTokenPerHour = val("cfg-adTokenPerHour-input")|| DEFAULT_CONFIG.adTokenPerHour;
-    cfg.adRate         = val("cfg-adRate-input")        || DEFAULT_CONFIG.adRate;
-
-    ensureConfig();
-    saveAll();
-    updateUI();
-    alert("토큰·코인 규칙이 저장되었습니다.");
-  });
-
-  // 블록체인: 블록 추가
-  document.getElementById("btnAddBlock").addEventListener("click", ()=>{
-    const title = document.getElementById("chain-title").value.trim();
-    const ref   = document.getElementById("chain-ref").value.trim();
-    const data  = document.getElementById("chain-data").value.trim();
-
-    if(!data){
-      alert("블록에 담을 내용을 입력해 주세요.");
-      return;
-    }
-    ensureChain();
-    const chain = globalState.chain;
-    const last  = chain[chain.length - 1];
-
-    const blkData = {
+    const last = chain[chain.length - 1];
+    const blk = {
       index: last.index + 1,
       timestamp: new Date().toISOString(),
       title,
-      ref,
-      data,
-      prevHash: last.hash
+      actor,
+      detail,
+      amount: amount ? Number(amount) : 0,
+      prevHash: last.hash,
+      hash: ""
     };
-    blkData.hash = simpleHash(JSON.stringify(blkData));
+    blk.hash = simpleHash(JSON.stringify(blk));
+    chain.push(blk);
+    saveChain();
+    renderChain();
 
-    chain.push(blkData);
-    saveAll();
-    updateUI();
+    // 입력칸 비우기
+    document.getElementById("blk-title").value = "";
+    document.getElementById("blk-actor").value = "";
+    document.getElementById("blk-amount").value = "";
+    document.getElementById("blk-detail").value = "";
+
     alert("새 블록이 추가되었습니다.");
+  }
+
+  // --- 초기 로딩 ---
+  window.addEventListener("DOMContentLoaded", () => {
+    loadProperty();
+    loadChain();
   });
 </script>
 </body>
 </html>
-
-
